@@ -17,9 +17,7 @@ pipeline {
         stage('Execute Python Script') {
             steps {
                 script {
-                    sh '''
-                    python3 ${workspace}/download.py
-                '''
+                    sh "python3 ${workspace}/download.py"
                 }
             }
         }
