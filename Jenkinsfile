@@ -18,7 +18,6 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    chmod +x ${workspace}/download.py
                     python3 ${workspace}/download.py
                 '''
                 }
