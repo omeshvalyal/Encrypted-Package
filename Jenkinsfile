@@ -9,8 +9,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
-                    // Replace 'https://github.com/your-username/your-repo.git' with your Git repository URL
-                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[url: 'https://github.com/your-username/your-repo.git']]])
+                   git branch: 'main', credentialsId: 'Github', url: 'git@github.com:omeshvalyal/Encrypted-Package.git'
                 }
             }
         }
@@ -18,8 +17,9 @@ pipeline {
         stage('Execute Python Script') {
             steps {
                 script {
-                    // Replace 'your-script.py' with the actual name of your Python script
-                    sh "python your-script.py --user ${params.User}"
+                    sh '''
+                    chmod +x {{$workspace}}/download.py
+                    python3 {{$workspace}}/download.py
                 }
             }
         }
