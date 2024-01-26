@@ -19,7 +19,7 @@ pipeline {
                 script {
                      // Run Python script and capture its output
                     def my_package = sh(script: "python3 ${workspace}/download.py", returnStdout: true).trim()
-                    def my_package = sh(returnStatus: true, script: python3 ${workspace}/download.py)
+//                    def my_package = sh(returnStatus: true, script: python3 ${workspace}/download.py)
 //                    sh "python3 ${workspace}/download.py"
                 }
             }
