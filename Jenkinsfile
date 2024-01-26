@@ -36,7 +36,8 @@ pipeline {
         stage('Calculate sha512sum of Package') {
             steps {
                 script {
-                    def sha512Sum = sh(script: "shasum -a 512 ${env.app_package} | awk '{print \$1}'", returnStdout: true).trim()
+                    def sha512Sum = sh(script: "openssl dgst -sha512 -hex ${env.app_package} | awk '{print \$2}'", returnStdout: true).trim()
+//                    def sha512Sum = sh(script: "shasum -a 512 ${env.app_package} | awk '{print \$1}'", returnStdout: true).trim()
                     echo "SHA-512 Sum: ${sha512Sum}"
                 }
             }
