@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     // Your Python script to generate the package URL
-                    def packageUrl = sh(script: "python3 ${workspace}/trigger.py", returnStdout: true).trim()            
+                    def packageUrl = sh(script: "python3 ${workspace}/trigger2.py", returnStdout: true).trim()            
                     env.PACKAGE_URL = packageUrl
                 }
             }
