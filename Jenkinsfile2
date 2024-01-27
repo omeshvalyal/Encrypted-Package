@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'User', description: 'Enter name of User')
+        string(name: 'url', description: 'Enter the required url')
     }
     
     stages {
@@ -15,14 +15,16 @@ pipeline {
             }
         }
         stage('Generate Package URL') {
-            steps {
-                script {
-                    // Your Python script to generate the package URL
-                    def packageUrl = sh(script: "python3 ${workspace}/trigger2.py", returnStdout: true).trim()            
-                    env.PACKAGE_URL = packageUrl
-                }
-            }
+    steps {
+        script {
+            // Your Python script to generate the package URL
+            def packageUrl = sh(script: "python3 ${workspace}/print_url.py ${params.url}", returnStdout: true).trim()
+            env.PACKAGE_URL = packageUrl
+            echo "Package URL: ${env.PACKAGE_URL}"
         }
+    }
+}
+
        stage('Download Package and Generate SHA512') {
     steps {
         script {
