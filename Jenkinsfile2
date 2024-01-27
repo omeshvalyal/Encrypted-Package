@@ -23,18 +23,19 @@ pipeline {
                 }
             }
         }
-        stage('Download Package and Generate SHA512') {
-            steps {
-                script {
-                    // Download the package
-                    sh "wget ${env.PACKAGE_URL} -P ${WORKSPACE}"
+       stage('Download Package and Generate SHA512') {
+    steps {
+        script {
+            // Download the package using the correct environment variable
+            def download_Pack = sh(script: "wget ${env.PACKAGE_URL} -P ${WORKSPACE}", returnStdout: true).trim()
 
-                    // Calculate SHA512 sum
-                    def sha512sum = sh(script: 'sha512sum ${WORKSPACE}/your_package_filename', returnStdout: true).split()[0]
-                    env.SHA512_SUM = sha512sum
-                }
-            }
+            // Calculate SHA512 sum
+            def sha512sum = sh(script: "sha512sum ${WORKSPACE}/download_Pack", returnStdout: true).split()[0]
+            env.SHA512_SUM = sha512sum
         }
+    }
+}
+
 /*
         stage('Create Word Document') {
             steps {
