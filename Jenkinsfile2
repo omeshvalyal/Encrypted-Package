@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+    parameters {
+        string(name: 'User', description: 'Enter name of User')
+    }
+    
+    stages {
+        
+        
+        stage('Clone Repository') {
+            steps {
+                script {
+                   git branch: 'main', credentialsId: 'Github', url: 'git@github.com:omeshvalyal/Encrypted-Package.git'
+                }
+            }
+        }
+        stage('Generate Package URL') {
+            steps {
+                script {
+                    // Your Python script to generate the package URL
+                    def packageUrl = sh(script: 'trigger.py', returnStdout: true).trim()
+                    env.PACKAGE_URL = packageUrl
+                }
+            }
+        }
+        stage('Download Package and Generate SHA512') {
+            steps {
+                script {
+                    // Download the package
+                    sh "wget ${env.PACKAGE_URL} -P ${WORKSPACE}"
+
+                    // Calculate SHA512 sum
+                    def sha512sum = sh(script: 'sha512sum ${WORKSPACE}/your_package_filename', returnStdout: true).split()[0]
+                    env.SHA512_SUM = sha512sum
+                }
+            }
+        }
+/*
+        stage('Create Word Document') {
+            steps {
+                script {
+                    // Create Word document with URL and SHA512 sum
+                    // You can use tools like pandoc or other methods to create a Word document
+                }
+            }
+        }
+
+        stage('Zip and Encrypt Document') {
+            steps {
+                script {
+                    // Create a random password
+                    def randomPassword = sh(script: 'openssl rand -base64 12', returnStdout: true).trim()
+
+                    // Zip and encrypt the Word document
+                    sh "zip -P ${randomPassword} ${WORKSPACE}/encrypted_document.zip ${WORKSPACE}/word_document.docx"
+                }
+            }
+        }
+
+        stage('Send Email') {
+            steps {
+                script {
+                    // Send encrypted document and password to the specified email
+                    mail to: 'orvalyal@gmail.com',
+                         subject: 'Encrypted Document',
+                         body: "Please find the encrypted document attached.\nPassword: ${randomPassword}",
+                         attachmentsPattern: "${WORKSPACE}/encrypted_document.zip"
+                }
+            }
+        }
+*/
+    }
+}
