@@ -31,6 +31,7 @@ pipeline {
             // Download the package using the correct environment variable
             def downloadPack = sh(script: "wget ${env.PACKAGE_URL} -P ${WORKSPACE}", returnStdout: true).trim()
             env.DOWNLOAD_PACK = downloadPack
+            echo "env.DOWNLOAD_PACK"
             // Calculate SHA512 sum
             cd ${WORKSPACE}
             def sha512sum = sh(script: "sha512sum ${env.DOWNLOAD_PACK}", returnStdout: true).split()[0]
