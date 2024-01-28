@@ -7,5 +7,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     url_parameter = sys.argv[1]
-    print(f"The provided URL is: {url_parameter}")
+    print(f"{url_parameter}")
 
