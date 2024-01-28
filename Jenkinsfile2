@@ -21,10 +21,9 @@ pipeline {
             def packageUrl = sh(script: "python3 ${WORKSPACE}/trigger2.py ${params.url}", returnStdout: true).trim()
             env.PACKAGE_URL = packageUrl
             echo "Package URL: ${env.PACKAGE_URL}"
+            }
         }
     }
-}
-
        stage('Download Package and Generate SHA512') {
     steps {
         script {
@@ -34,6 +33,31 @@ pipeline {
             def sha512sum = sh(script: "sha512sum ${downloadPack}", returnStdout: true).split()[0]
             env.SHA512_SUM = sha512sum
             echo "SHA512 Sum: ${env.SHA512_SUM}"
+               }
+            }
+        }
+        stage('Generate Random Password') {
+            steps {
+                script {
+                    def randomPassword = sh(script: 'pwgen -1 12', returnStdout: true).trim()
+                    echo "Random Password: ${randomPassword}"
+                }
+            }
+        }
+        stage('Create Word File') {
+        steps {
+            script {
+                // Create a markdown file with package information
+                writeFile file: "${WORKSPACE}/package_info.md", text: """
+                    # Package Information
+
+                    **Package URL:** ${env.PACKAGE_URL}
+                    **SHA512 Sum:** ${env.SHA512_SUM}
+                """
+                // Convert markdown to Word using Pandoc
+                sh "pandoc ${WORKSPACE}/package_info.md -o ${WORKSPACE}/link.docx"
+               }
+            }
         }
     }
 }
