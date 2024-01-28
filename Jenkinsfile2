@@ -18,7 +18,7 @@ pipeline {
     steps {
         script {
             // Your Python script to generate the package URL
-            def packageUrl = sh(script: "python3 ${workspace}/trigger2.py ${params.url}", returnStdout: true).trim()
+            def packageUrl = sh(script: "python3 ${WORKSPACE}/trigger2.py ${params.url}", returnStdout: true).trim()
             env.PACKAGE_URL = packageUrl
             echo "Package URL: ${env.PACKAGE_URL}"
         }
@@ -30,12 +30,11 @@ pipeline {
         script {
             // Download the package using the correct environment variable
             def downloadPack = sh(script: "wget ${env.PACKAGE_URL} -P ${WORKSPACE}", returnStdout: true).trim()
-            env.DOWNLOAD_PACK = downloadPack
-            echo "${env.DOWNLOAD_PACK}"
             // Calculate SHA512 sum
             cd ${WORKSPACE}
-            def sha512sum = sh(script: "sha512sum ${env.DOWNLOAD_PACK}", returnStdout: true).split()[0]
+            def sha512sum = sh(script: "sha512sum ${downloadPack}", returnStdout: true).split()[0]
             env.SHA512_SUM = sha512sum
+            echo "SHA512 Sum: ${env.SHA512_SUM}"
         }
     }
 }
