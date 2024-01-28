@@ -1,7 +1,7 @@
 import requests
 
 # Assigning a URL to a variable
-package_Url = "https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.85/bin/apache-tomcat-9.0.85.tar.gz"
+package_Url = "https://www.oracle.com/middleware/technologies/weblogic-server-installers-downloads.html#license-lightbox"
 
 print("Package URL:", package_Url)
 
